@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source ~/ros2_ws/install/setup.bash
+
 dir=~
 [ "$1" != "" ] && dir="$1"
 
