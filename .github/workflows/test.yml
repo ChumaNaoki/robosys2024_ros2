@@ -6,8 +6,19 @@ jobs:
     container: ryuichiueda/ubuntu22.04-ros2:latest
     steps:
       - uses: actions/checkout@v2
-      - name: build and test
+      - name: Build and test
         run: |
+          # ROS 2のセットアップ
+          source /opt/ros/foxy/setup.bash
+          
+          # ワークスペースのセットアップ
           rsync -av ./ /root/ros2_ws/src/
           cd /root/ros2_ws
+
+          # 依存関係をビルド
+          colcon build
+          source install/setup.bash
+
+          # テストの実行
           bash -xv ./src/mypkg/test/test.bash /root
+
