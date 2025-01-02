@@ -11,8 +11,3 @@ jobs:
           rsync -av ./ /root/ros2_ws/src/
           cd /root/ros2_ws
           bash -xv ./src/mypkg/test/test.bash /root
-      - name: Check ROS 2 workspace
-          run: |
-            ls -la /root/ros2_ws/src
-            ls -la /root/ros2_ws/install
-            colcon list
