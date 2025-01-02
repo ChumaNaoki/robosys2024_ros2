@@ -1,20 +1,13 @@
-#!/bin/bash
-
-source /opt/ros/humble/setup.bash
-source /root/ros2_ws/install/setup.bash
-
-source ~/ros2_ws/install/setup.bash
-
-dir=~
-[ "$1" != "" ] && dir="$1"
-
-source /opt/ros/humble/setup.bash
-source /root/ros2_ws/install/setup.bash
-
-
-cd $dir/ros2_ws
-colcon build
-source $dir/.bashrc
-timeout 8 ros2 launch mypkg talk_listen.launch.py > /tmp/mypkg.log
-cat /tmp/mypkg.log |
-grep '10角形の内角の和は: 1440°'
+name: test
+on: push
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    container: ryuichiueda/ubuntu22.04-ros2:latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: build and test
+        run: |
+          rsync -av ./ /root/ros2_ws/src/
+          cd /root/ros2_ws
+          bash -xv ./src/mypkg/test/test.bash /root

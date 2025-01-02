@@ -1,26 +1,10 @@
-name: test
-on: push
-jobs:
-  test:
-    runs-on: ubuntu-22.04
-    container: ryuichiueda/ubuntu22.04-ros2:latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Build and test
-        run: |
-          # 明示的にbashを使う
-          bash -c "
-            # ROS 2のセットアップ
-            source /opt/ros/foxy/setup.bash
+#!/bin/bash
 
-            # ワークスペースのセットアップ
-            rsync -av ./ /root/ros2_ws/src/
-            cd /root/ros2_ws
+dir=~
+[ "$1" != "" ] && dir="$1"
 
-            # 依存関係をビルド
-            colcon build
-            source install/setup.bash
+cd $dir/ros2_ws
+colcon build
+source $dir/.bashrc
 
-            # テストの実行
-            bash -xv ./src/mypkg/test/test.bash /root
-          "
+timeout 10 ros2 launch mypkg talk_listen.launch.py > /tmp/mypkg.log
